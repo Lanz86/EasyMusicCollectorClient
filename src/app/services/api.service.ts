@@ -6,10 +6,11 @@ import { PageResult } from '../models/page-result';
 import { catchError, tap, map } from 'rxjs/operators';
 import { AlbumOutput } from '../models/album-output';
 import { AlbumPageItem } from '../models/album-page-item';
+import { ArtistOutput } from '../models/artist-output';
 @Injectable({
   providedIn: 'root'
 })
-export class AlbumService {
+export class ApiService {
 
   private serverUrl;
 
@@ -26,20 +27,35 @@ export class AlbumService {
     this.serverUrl = environment.apiUrl;
   }
 
-  public getAlbums(): Observable<AlbumPageItem> {
-    return this.http.get<any>(this.serverUrl + '/albums')
+  public getAlbums(): Observable<PageResult> {
+    return this.http.get<PageResult>(this.serverUrl + '/albums')
       .pipe(
         tap(page => console.log('fetched page')),
-        catchError(this.handleError('getAlbums', []))
+        catchError(err => this.handleError('getAlbums', []))
       );
   }
 
   public getAlbum(id: number): Observable<AlbumOutput> {
-    console.log(id);
     return this.http.get<any>(this.serverUrl + `/albums/${id}/`)
       .pipe(
         tap(page => console.log('fetched album')),
-        catchError(this.handleError('getAlbum${id}', []))
+        catchError(err => this.handleError('getAlbum${id}', []))
+      );
+  }
+
+  updateAlbum (id, album): Observable<any> {
+    const url = `${this.serverUrl}/albums/${id}`;
+    return this.http.put(url, album).pipe(
+      tap(_ => console.log(`updated product id=${id}`)),
+      catchError(this.handleError<any>('updateProduct'))
+    );
+  }
+
+  public getArtists(): Observable<ArtistOutput[]> {
+    return this.http.get<any>(this.serverUrl + `/artists/`)
+      .pipe(
+        tap(page => console.log('fetched artists')),
+        catchError(err => this.handleError('getArtists', []))
       );
   }
 }

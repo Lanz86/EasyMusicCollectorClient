@@ -1,7 +1,7 @@
-import { ProductPageItem } from './product-page-item';
+import { AlbumPageItem } from './album-page-item';
 
 export interface PageResult {
   limit: number;
   page: number;
-  data: ProductPageItem[];
+  data: AlbumPageItem[];
 }

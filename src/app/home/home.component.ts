@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AlbumService } from '../services/album.service';
 import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
 
   pageAlbum;
 
-  constructor(private route: ActivatedRoute, private albumApi: AlbumService) { }
+  constructor(private route: ActivatedRoute, private albumApi: ApiService) { }
 
   ngOnInit(): void {
     this.albumApi.getAlbums().subscribe(res => {

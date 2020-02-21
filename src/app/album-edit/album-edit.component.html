@@ -1,3 +1,9 @@
-<div>
-  <label>Nome: </label>{{album.name}}
-</div>
+<form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
+  <label>Name: </label>
+  <input type="text" formControlName="name" [ngModel]="album.name">
+  <div *ngFor="let artist of albumForm.controls.artists.controls; let i=index;" >
+    <input type="checkbox" [formControl]="artist">
+    <label>{{artists[i].name}}</label>
+  </div>
+  <button type="submit">Save</button>
+</form>
