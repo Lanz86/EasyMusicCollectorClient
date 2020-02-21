@@ -7,11 +7,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let album of albums">
+    <tr *ngFor="let album of pageAlbum.data">
       <th scope="row">1</th>
       <td>{{album.name}}</td>
       <td>
         <span *ngFor="let author of album.artists">{{author.name}}</span>
+      </td>
+      <td>
+        <a [routerLink]="['/albums/', album.id]">Edit</a>
       </td>
     </tr>
   </tbody>
