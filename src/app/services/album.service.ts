@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AlbumService {
 
-  private serverUrl = 'http://localhost:3000';
+  private serverUrl = 'http://localhost:8000';
   constructor(private httpClient: HttpClient) { }
 
   public getAlbums() {
