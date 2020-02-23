@@ -20,10 +20,10 @@ export class AlbumEditComponent implements OnInit {
   albumForm = new FormGroup({
     name: new FormControl(''),
     year: new FormControl(),
-    genres: new FormArray([]),
+    genres: new FormControl([]),
     type: new FormControl(''),
     support: new FormControl(''),
-    artists: new FormArray([])
+    artists: new FormControl([])
   });
 
   artists: ArtistOutput[];
@@ -46,14 +46,25 @@ export class AlbumEditComponent implements OnInit {
       this.artists = results[1];
       this.genres = results[2];
 
-      this.createArtists();
-      this.createGenres();
+      this.albumForm.get('genres').setValue(this.genres.filter(val => {
+        return this.album.genres.filter(x => {
+          return (x as any).id === val.id;
+        }).length > 0;
+      }));
 
-      const selectedType = this.types.filter(val => {
-          return val.value === this.album.type;
-      });
+      this.albumForm.get('artists').setValue(this.artists.filter(val => {
+        return this.album.artists.filter(x => {
+          return (x as any).id === val.id;
+        }).length > 0;
+      }));
 
-      this.albumForm.get('type').setValue(selectedType[0]);
+      this.albumForm.get('type').setValue(this.types.filter(val => {
+        return val.value === this.album.type;
+      })[0]);
+
+      this.albumForm.get('support').setValue(this.supports.filter(val => {
+        return val.value === this.album.type;
+      })[0]);
 
       this.loaded = true;
     });
@@ -61,19 +72,11 @@ export class AlbumEditComponent implements OnInit {
 
   onSubmit() {
     const selectedArtists = this.albumForm.value.artists.map((selected, i) => {
-      if (selected) {
-        return (this.artists[i] as any).id;
-      }
-    }).filter(val => {
-      return val !== undefined;
+      return selected.id;
     });
 
     const selectedGenres = this.albumForm.value.genres.map((selected, i) => {
-      if (selected) {
-        return (this.genres[i] as any).id;
-      }
-    }).filter(val => {
-      return val !== undefined;
+      return selected.id;
     });
 
     const albumToSave = {
@@ -85,32 +88,10 @@ export class AlbumEditComponent implements OnInit {
       support: this.albumForm.value.support.value
     } as AlbumInput;
 
+
+
     this.albumApi.updateAlbum(this.route.snapshot.params.id, albumToSave).subscribe(res => {
-      //this.router.navigate(['/home']);
-    });
-  }
-
-  createArtists() {
-    const arrayTest = [];
-
-    const selectedArray = this.album.artists.map(c  => {
-      return (c as any).id;
-    });
-
-    this.artists.forEach(element => {
-      (this.albumForm.controls.artists as FormArray).push(new FormControl(selectedArray.includes(element.id)));
-    });
-  }
-
-  createGenres() {
-    const arrayTest = [];
-
-    const selectedArray = this.album.genres.map(c  => {
-      return (c as any).id;
-    });
-
-    this.genres.forEach(element => {
-      (this.albumForm.controls.genres as FormArray).push(new FormControl(selectedArray.includes(element.id)));
+      this.router.navigate(['/home']);
     });
   }
 

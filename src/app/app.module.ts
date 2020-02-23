@@ -7,13 +7,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { AlbumEditComponent } from './album-edit/album-edit.component';
 import { LoaderComponent } from './loader/loader.component';
+import { AlbumCreateComponent } from './album-create/album-create.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AlbumEditComponent,
-    LoaderComponent
+    LoaderComponent,
+    AlbumCreateComponent
   ],
   imports: [
     BrowserModule,

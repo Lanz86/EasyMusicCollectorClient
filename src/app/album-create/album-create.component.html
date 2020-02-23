@@ -1,15 +1,12 @@
-<div *ngIf="!loaded">
-  <app-loader></app-loader>
-</div>
-<form *ngIf="loaded" [formGroup]="albumForm" (ngSubmit)="onSubmit()">
-  <h2>Modifica album: {{album.name}}</h2>
+<h2>Aggiungi nuovo album</h2>
+<form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
   <div [className]="'form-group'">
     <label>Nome: </label>
-    <input class="form-control" type="text" formControlName="name" [(ngModel)]="album.name" placeHolder="Album name">
+    <input class="form-control" type="text" formControlName="name" placeHolder="Album name">
   </div>
   <div [className]="'form-group'">
     <label>Anno: </label>
-    <input class="form-control" type="text" formControlName="year" [(ngModel)]="album.year" placeHolder="Anno uscita">
+    <input class="form-control" type="text" formControlName="year" placeHolder="Anno uscita">
   </div>
   <div [className]="'form-group'">
     <label>Artisti: </label>
@@ -20,7 +17,7 @@
   <div [className]="'form-group'">
     <label>Generi: </label>
     <select multiple class="form-control" formControlName="genres">
-      <option *ngFor="let genre of genres" [ngValue]="artist">{{genre.code}} - {{genre.name}}</option>
+      <option *ngFor="let genre of genres" [ngValue]="genre">{{genre.code}} - {{genre.name}}</option>
     </select>
   </div>
   <div [className]="'form-group'">

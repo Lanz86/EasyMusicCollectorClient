@@ -44,11 +44,27 @@ export class ApiService {
       );
   }
 
-  updateAlbum(id, album): Observable<any> {
+  public createAlbum(album): Observable<any> {
+    const url = `${this.serverUrl}/albums/`;
+    return this.http.post(url, album).pipe(
+      tap(_ => console.log(`added album`)),
+      catchError(this.handleError<any>('createAlbum'))
+    );
+  }
+
+  public updateAlbum(id, album): Observable<any> {
     const url = `${this.serverUrl}/albums/${id}`;
     return this.http.put(url, album).pipe(
-      tap(_ => console.log(`updated product id=${id}`)),
-      catchError(this.handleError<any>('updateProduct'))
+      tap(_ => console.log(`updated album  id=${id}`)),
+      catchError(this.handleError<any>('updateAlbum'))
+    );
+  }
+
+  public deleteAlbum(id): Observable<any> {
+    const url = `${this.serverUrl}/albums/${id}`;
+    return this.http.delete(url).pipe(
+      tap(_ => console.log(`deleted album id=${id}`)),
+      catchError(this.handleError<any>('deleteAlbum'))
     );
   }
 

@@ -1,33 +1,43 @@
-<div class="content"></div>
-<h2>Albums</h2>
-<button type="button" class="btn btn-primary btn-lg">Aggiungi Album</button>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Artist</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let album of pageAlbum.data">
-      <th scope="row">1</th>
-      <td>{{album.name}}</td>
-      <td>
-        <span *ngFor="let author of album.artists">{{author.name}}</span>
-      </td>
-      <td>
-        <a [routerLink]="['/albums/', album.id]">Edit</a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-  </ul>
-</nav>
+<div *ngIf="!loaded" class="content">
+  <app-loader></app-loader>
+</div>
+<div *ngIf="loaded" class="content">
+  <h2>Albums</h2>
+  <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/albums/create']" >Aggiungi Album</button>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Artista</th>
+        <th scope="col">Genere</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let album of pageAlbum.data; let i=index">
+        <th scope="row">{{i+1}}</th>
+        <td>{{album.name}}</td>
+        <td>
+          <span *ngFor="let author of album.artists">{{author.name}}</span>
+        </td>
+        <td>
+          <span *ngFor="let genre of album.generes">{{genre.name}}</span>
+        </td>
+        <td>
+          <a [routerLink]="['/albums/', album.id]">Modifica</a>&nbsp;
+          <a (click)="onDelete(album)" href="javascript:void(0)">Cancella</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+  </nav>
+</div>
