@@ -1,9 +1,42 @@
-<form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
-  <label>Name: </label>
-  <input type="text" formControlName="name" [ngModel]="album.name">
-  <div *ngFor="let artist of albumForm.controls.artists.controls; let i=index;" >
-    <input type="checkbox" [formControl]="artist">
-    <label>{{artists[i].name}}</label>
+<div *ngIf="!loaded">
+  <app-loader></app-loader>
+</div>
+<form *ngIf="loaded" [formGroup]="albumForm" (ngSubmit)="onSubmit()">
+  <div [className]="'form-group'">
+    <label>Nome: </label>
+    <input class="form-control" type="text" formControlName="name" [(ngModel)]="album.name" placeHolder="Album name">
+  </div>
+  <div [className]="'form-group'">
+    <label>Anno: </label>
+    <input class="form-control" type="text" formControlName="year" [(ngModel)]="album.year" placeHolder="Anno uscita">
+  </div>
+  <div [className]="'form-group'">
+    <label>Artisti: </label>
+    <div class="form-check" *ngFor="let artist of albumForm.controls.artists.controls; let i=index;">
+        <input class="form-check-input" type="checkbox" [formControl]="artist">
+        <label class="form-check-label">{{artists[i]?.name}}</label>
+    </div>
+  </div>
+  <div [className]="'form-group'">
+    <label>Generi: </label>
+    <div class="form-check" *ngFor="let genre of albumForm.controls.genres.controls; let ix=index;">
+        <input class="form-check-input" type="checkbox" [formControl]="genre">
+        <label class="form-check-label">{{genres[ix]?.name}}</label>
+    </div>
+  </div>
+  <div [className]="'form-group'">
+    <label>Supporto:</label>
+    <select class="custom-select" formControlName="type">
+      <option value="" disabled>Scegli tipo</option>
+      <option *ngFor="let type of types" [ngValue]="type">{{type.name}}</option>
+    </select>
+  </div>
+  <div [className]="'form-group'">
+    <label>Supporto:</label>
+    <select class="custom-select" formControlName="type">
+      <option value="" disabled>Scegli supporto</option>
+      <option *ngFor="let support of supports" [ngValue]="support">{{support.name}}</option>
+    </select>
   </div>
   <button type="submit">Save</button>
 </form>

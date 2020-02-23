@@ -6,12 +6,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { AlbumEditComponent } from './album-edit/album-edit.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    AlbumEditComponent
+    AlbumEditComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

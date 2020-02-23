@@ -7,6 +7,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { AlbumOutput } from '../models/album-output';
 import { AlbumPageItem } from '../models/album-page-item';
 import { ArtistOutput } from '../models/artist-output';
+import { GenresOutput } from '../models/genres-output';
 @Injectable({
   providedIn: 'root'
 })
@@ -43,7 +44,7 @@ export class ApiService {
       );
   }
 
-  updateAlbum (id, album): Observable<any> {
+  updateAlbum(id, album): Observable<any> {
     const url = `${this.serverUrl}/albums/${id}`;
     return this.http.put(url, album).pipe(
       tap(_ => console.log(`updated product id=${id}`)),
@@ -57,5 +58,13 @@ export class ApiService {
         tap(page => console.log('fetched artists')),
         catchError(err => this.handleError('getArtists', []))
       );
+  }
+
+  public getGenres(): Observable<GenresOutput[]> {
+    return this.http.get<GenresOutput[]>(this.serverUrl + `/genres/`)
+    .pipe(
+      tap(page => console.log('fetched artists')),
+      catchError(err => this.handleError('getArtists', []))
+    );
   }
 }

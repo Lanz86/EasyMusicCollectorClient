@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AlbumOutput } from '../models/album-output';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {FormGroup, FormControl, FormArray } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { ArtistOutput } from '../models/artist-output';
 import { forkJoin } from 'rxjs';
 import { AlbumInput } from '../models/album-input';
+import { GenresOutput } from '../models/genres-output';
 
 @Component({
   selector: 'app-album-edit',
@@ -18,59 +19,75 @@ export class AlbumEditComponent implements OnInit {
 
   albumForm = new FormGroup({
     name: new FormControl(''),
-    artists: new FormArray([]),
+    year: new FormControl(),
+    genres: new FormArray([]),
+    type: new FormControl(''),
+    support: new FormControl(''),
+    artists: new FormArray([])
   });
 
   artists: ArtistOutput[];
+  genres: GenresOutput[];
+  types: any = [{value: 1,  name: 'Album'}, {value: 2, name: 'Singolo'}];
+  supports: any = [{value: 1,  name: 'CD'}, {value: 2, name: 'Vinile'}, {value: 3, name: 'Musicassetta'}, {value: 4, name: 'Digitale'}];
+  loaded: boolean = false;
 
-  constructor(private route: ActivatedRoute, private albumApi: ApiService) { }
+
+  constructor(private route: ActivatedRoute, private router: Router, private albumApi: ApiService) { }
 
   ngOnInit(): void {
-    let albumsPromise = this.albumApi.getAlbum(this.route.snapshot.params.id);
-    let artistsPromise = this.albumApi.getArtists();
+    const albumsPromise = this.albumApi.getAlbum(this.route.snapshot.params.id);
+    const artistsPromise = this.albumApi.getArtists();
+    const genresPromise = this.albumApi.getGenres();
 
-    forkJoin([albumsPromise, artistsPromise]).subscribe(results => {
+    forkJoin([albumsPromise, artistsPromise, genresPromise]).subscribe(results => {
       console.log(results[0]);
       this.album = results[0];
       this.artists = results[1];
-
-      console.log(this.artists);
+      this.genres = results[2];
 
       this.createArtists();
-    });
-    /*.subscribe(res => {
+      this.createGenres();
 
-    }, err => {
-      console.log(err);
-    });*/
+      const selectedType = this.types.filter(val => {
+          return val.value === this.album.type;
+      });
+
+      this.albumForm.get('type').setValue(selectedType[0]);
+
+      this.loaded = true;
+    });
   }
 
   onSubmit() {
-    console.log(this.albumForm.value);
-    let selectedArtists = this.albumForm.value.artists.map((val, key) => {
-      if(val) {
-        return (this.album.artists[key] as any).id;
+    const selectedArtists = this.albumForm.value.artists.map((selected, i) => {
+      if (selected) {
+        return (this.artists[i] as any).id;
       }
-    }).filter(function(val) {
+    }).filter(val => {
+      return val !== undefined;
+    });
+
+    const selectedGenres = this.albumForm.value.genres.map((selected, i) => {
+      if (selected) {
+        return (this.genres[i] as any).id;
+      }
+    }).filter(val => {
       return val !== undefined;
     });
 
     const albumToSave = {
       name: this.albumForm.value.name,
       artists: selectedArtists,
-	    year: 2019,
-	    generes: [],
-	    type: 1,
-	    support: 0
+      year: this.albumForm.value.year,
+      generes: selectedGenres,
+      type: this.albumForm.value.type.value,
+      support: this.albumForm.value.support.value
     } as AlbumInput;
-    //albumToSave.name = this.albumForm.name;
-    //albumToSave.
 
     this.albumApi.updateAlbum(this.route.snapshot.params.id, albumToSave).subscribe(res => {
-      console.log("Saved");
+      //this.router.navigate(['/home']);
     });
-
-    console.log(selectedArtists);
   }
 
   createArtists() {
@@ -82,6 +99,18 @@ export class AlbumEditComponent implements OnInit {
 
     this.artists.forEach(element => {
       (this.albumForm.controls.artists as FormArray).push(new FormControl(selectedArray.includes(element.id)));
+    });
+  }
+
+  createGenres() {
+    const arrayTest = [];
+
+    const selectedArray = this.album.genres.map(c  => {
+      return (c as any).id;
+    });
+
+    this.genres.forEach(element => {
+      (this.albumForm.controls.genres as FormArray).push(new FormControl(selectedArray.includes(element.id)));
     });
   }
 
