@@ -2,8 +2,12 @@
   <app-loader></app-loader>
 </div>
 <div *ngIf="loaded" class="content">
-  <h2>Albums</h2>
-  <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/albums/create']" >Aggiungi Album</button>
+  <div class="header content">
+    <div style="float:left;">
+      <h2>Album</h2>
+    </div>
+    <button style="float: right;" type="button" class="btn btn-primary btn-lg" [routerLink]="['/albums/create']" >Aggiungi Album</button>
+  </div>
   <table class="table table-sm">
     <thead>
       <tr>

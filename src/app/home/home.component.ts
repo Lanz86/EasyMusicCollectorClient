@@ -10,7 +10,7 @@ import { ApiService } from '../services/api.service';
 export class HomeComponent implements OnInit {
 
   pageAlbum;
-  loaded: boolean = false;
+  loaded = false;
 
   constructor(private route: ActivatedRoute, private albumApi: ApiService) { }
 
