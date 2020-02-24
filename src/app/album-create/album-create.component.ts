@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { GenresOutput } from '../models/genres-output';
 import { ArtistOutput } from '../models/artist-output';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,12 +15,12 @@ import { AlbumInput } from '../models/album-input';
 export class AlbumCreateComponent implements OnInit {
 
   albumForm = new FormGroup({
-    name: new FormControl(''),
-    year: new FormControl(),
-    genres: new FormControl([]),
-    type: new FormControl(''),
-    support: new FormControl(''),
-    artists: new FormControl([])
+    name: new FormControl('', [Validators.required]),
+    year: new FormControl('', [Validators.required]),
+    genres: new FormControl([], [Validators.required]),
+    type: new FormControl('', [Validators.required]),
+    support: new FormControl('', [Validators.required]),
+    artists: new FormControl([], [Validators.required])
   });
 
   artists: ArtistOutput[];
@@ -42,6 +42,11 @@ export class AlbumCreateComponent implements OnInit {
   }
 
   onSubmit() {
+
+    if (this.albumForm.invalid)  {
+      return;
+    }
+
     console.log(this.albumForm.value);
 
     const selectedArtist = this.albumForm.get('artists').value.map(c => {
@@ -66,6 +71,33 @@ export class AlbumCreateComponent implements OnInit {
     this.albumApi.createAlbum(albumToAdd).subscribe(res => {
       this.router.navigate(['/home']);
     });
+  }
 
+  onClickCancel() {
+    this.router.navigate(['/home']);
+  }
+
+  get year() {
+    return this.albumForm.get('year');
+  }
+
+  get name() {
+    return this.albumForm.get('name');
+  }
+
+  get artistsElement() {
+    return this.albumForm.get('artists');
+  }
+
+  get genresElement() {
+    return this.albumForm.get('genres');
+  }
+
+  get typeElement() {
+    return this.albumForm.get('type');
+  }
+
+  get supportElement() {
+    return this.albumForm.get('support');
   }
 }

@@ -95,4 +95,32 @@ export class AlbumEditComponent implements OnInit {
     });
   }
 
+  onClickCancel() {
+    this.router.navigate(['/home']);
+  }
+
+  get year() {
+    return this.albumForm.get('year');
+  }
+
+  get name() {
+    return this.albumForm.get('name');
+  }
+
+  get artistsElement() {
+    return this.albumForm.get('artists');
+  }
+
+  get genresElement() {
+    return this.albumForm.get('genres');
+  }
+
+  get typeElement() {
+    return this.albumForm.get('type');
+  }
+
+  get supportElement() {
+    return this.albumForm.get('support');
+  }
+
 }

@@ -3,22 +3,34 @@
   <div [className]="'form-group'">
     <label>Nome: </label>
     <input class="form-control" type="text" formControlName="name" placeHolder="Album name">
+    <span *ngIf="(name.dirty || name.touched) && name.invalid && name.errors.required">
+      Il campo nome è obbligatorio.
+    </span>
   </div>
   <div [className]="'form-group'">
     <label>Anno: </label>
     <input class="form-control" type="text" formControlName="year" placeHolder="Anno uscita">
+    <span *ngIf="(year.dirty || year.touched) && year.invalid && year.errors.required">
+      Il campo anno è obbligatorio.
+    </span>
   </div>
   <div [className]="'form-group'">
     <label>Artisti: </label>
     <select multiple class="form-control" formControlName="artists">
       <option *ngFor="let artist of artists" [ngValue]="artist">{{artist.name}}</option>
     </select>
+    <span *ngIf="(artistsElement.dirty || artistsElement.touched) && artistsElement.invalid && artistsElement.errors.required">
+      E' obbigatorio selezionare almeno un'artista.
+    </span>
   </div>
   <div [className]="'form-group'">
     <label>Generi: </label>
     <select multiple class="form-control" formControlName="genres">
       <option *ngFor="let genre of genres" [ngValue]="genre">{{genre.code}} - {{genre.name}}</option>
     </select>
+    <span *ngIf="(genresElement.dirty || genresElement.touched) && genresElement.invalid && genresElement.errors.required">
+      E' obbigatorio selezionare almeno un genere.
+    </span>
   </div>
   <div [className]="'form-group'">
     <label>Tipo:</label>
@@ -26,6 +38,9 @@
       <option value="" disabled>Scegli tipo</option>
       <option *ngFor="let type of types" [ngValue]="type">{{type.name}}</option>
     </select>
+    <span *ngIf="(typeElement.dirty || typeElement.touched) && typeElement.invalid && typeElement.errors.required">
+      E' obbigatorio selezionare un tipo.
+    </span>
   </div>
   <div [className]="'form-group'">
     <label>Supporto:</label>
@@ -33,7 +48,10 @@
       <option value="" disabled>Scegli supporto</option>
       <option *ngFor="let support of supports" [ngValue]="support">{{support.name}}</option>
     </select>
+    <span *ngIf="(supportElement.dirty || supportElement.touched) &&  supportElement.invalid && supportElement.errors.required">
+      E' obbigatorio selezionare un supporto.
+    </span>
   </div>
-  <button type="submit" class="btn btn-primary btn-lg">Salve</button>
-  <button type="button" class="btn btn-secondary btn-lg">Salve</button>
+  <button type="submit" class="btn btn-primary btn-lg">Salva</button>&nbsp;
+  <button type="button" class="btn btn-secondary btn-lg" (click)="onClickCancel()">Annulla</button>
 </form>
